@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyString
+  number_of_likes: 1
+  number_of_dislikes: 1
+  number_of_answers: 1
+
+two:
+  title: MyString
+  description: MyString
+  number_of_likes: 1
+  number_of_dislikes: 1
+  number_of_answers: 1
