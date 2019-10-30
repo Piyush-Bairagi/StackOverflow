@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>StackOverflow</title>
   </head>
   <body>
     <center>
       <br>
-      <h1><u>Public Questions :-</u></h1>
+      <h1><u>All Questions :-</u></h1><br>
       <%= link_to '<button class="btn btn-primary" type="button">Ask Question</button>'.html_safe, new_question_path %>
-      <hr>
-      <table>
-        <% @questions.each do |question| %>
-          <tr>
-            <td><h3><br><%= question.title %></h3></td>
-          </tr>
-          <tr>
-            <td><%= question.description %></td>
-            <td><%= link_to '<button class="btn btn-success" type="button">View</button>'.html_safe, question_path(question) %></td>
-          </tr>
-        <% end %>
-      </table>
+      <br><br>
+      <h3>Total <%= @questions.count %> Questions</h3>
+      <br><br><hr>
     </center>
+
+    <% @questions.each do |question| %>
+      <h3><%= link_to question.title, question_path(question) %></h3>
+      <td><%= question.description %></td>
+      <hr>
+    <% end %>
     <br><br>
   </body>
 </html>

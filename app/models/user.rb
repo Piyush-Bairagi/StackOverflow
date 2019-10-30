@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -11,6 +13,6 @@ class User < ApplicationRecord
       user.expires = auth.credentials.expires
       user.expires_at = auth.credentials.expires_at
       user.refresh_token = auth.credentials.refresh_token
+    end
   end
-end
 end

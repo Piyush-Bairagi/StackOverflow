@@ -3,7 +3,6 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-
   client_id = "135330291998-i2qa021vpcs70ud6940e8oa0nusf038h.apps.googleusercontent.com"
   client_secret = "GYtB3X5peSLNjzD-LzsgyGu4"
   config.omniauth :google_oauth2, client_id, client_secret, {

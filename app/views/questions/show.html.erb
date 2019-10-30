@@ -1,24 +1,45 @@
 <html>
-<head>
-  <title>Stack Overflow</title>
-</head>
-<body>
-  <br><br><br><br>
-  <center>
-    <h1>Question :-</h1>
-    <hr>  
+  <head>
+  </head>
+  <body>
     <h3><%= @question.title %></h3>
-    <p><%= @question.description %></p>
-    <% @answers.each do |answer| %>
-      <p><%= answer.description %></p>
-    <% end %>
+    <%= @question.description %>
+    <hr>
 
     <center>
-        <h1><u>Your Answer :-</u></h1>
-      </center>
+      <h3><u><%= @answers.count %> Answers</u></h3>
+    </center>
+    <br>
 
-    <%= link_to '<button class="btn btn-info" type="button">Back</button>'.html_safe, questions_path %>
-  </center>
-  <br><br><br><br><hr>
-</body>
+    <% @answers.each do |answer| %>
+      <p><%= answer.description %></p>
+      <% @comments.each do | comment | %>
+        <p><%= comment.description %></p>
+
+        <%= form_for [@answer, @comment] do |f| %>
+          <p>
+            <h2><%= f.label :Comment %></h2>
+            <%= f.text_area :comment %>
+          </p>
+          <p>
+            <%= f.submit "Comment" %>
+          </p>
+        <% end %>
+      <% end %><hr>
+    <% end %><br>
+
+    <center>
+      <%= form_for [@question, @answer] do |form| %>
+        <p>
+          <h2><%= form.label :Your_answer %></h2>
+          <%= form.text_area :description %>
+        </p>
+        <p>
+          <%= form.submit "Answer" %>
+        </p>
+      <% end %>
+      <%= link_to '<button class="btn btn-info" type="button">Back</button>'.html_safe, questions_path %>
+    </center>
+    <br><br>
+  </body>
 </html>

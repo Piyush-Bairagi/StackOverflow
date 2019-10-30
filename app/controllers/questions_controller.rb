@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class QuestionsController < ApplicationController
   def index
     @questions = Question.all
@@ -8,6 +10,8 @@ class QuestionsController < ApplicationController
     @answers = @question.answers
     @answer = @question.answers.new
 
+    @comments = @answer.comments
+    @comment = @answer.comments.new
   end
 
   def new
@@ -26,7 +30,8 @@ class QuestionsController < ApplicationController
   end
 
   private
-    def question_params
-      params.require(:question).permit(:title, :description)
-    end
+
+  def question_params
+    params.require(:question).permit(:title, :description)
+  end
 end

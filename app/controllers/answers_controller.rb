@@ -1,33 +1,29 @@
-class AnswersController < ApplicationController
-  def index
-    if params[:question_id]
-      @answers = Answer.find(params[:question_id]).includes(:questions).answers
-    else
-      @answers = Answer.all
-    end
-  end
+# frozen_string_literal: true
 
+class AnswersController < ApplicationController
   def new
     @answer = Answer.new
   end
 
   def create
-    @question = @question.find(params[id])
-    @answer = @question.answers.create(answers_params)
+    @question = Question.find(params[:question_id])
+    @answer = @question.answers.new(answer_params)
 
+    @comment.user_id = current_user.id
     if @answer.save
-      redirect_to @answer
+      redirect_to question_path
     else
-      render 'new'
+      render 'questions/show'
     end
   end
 
   def show
-    @answer = Answer.find(:id)
+    render 'questions/show'
   end
 
   private
-    def answers_params
-      params.require(:answer).permit(:description)
-    end
+
+  def answer_params
+    params.require(:answer).permit(:description, :question_id)
+  end
 end
