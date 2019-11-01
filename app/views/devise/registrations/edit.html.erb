@@ -1,5 +1,6 @@
 <center>
   <h2><u>Edit <%= resource_name.to_s.humanize %></u></h2><br><br>
+  <%= image_tag(@user.profile_photo.to_s, :size => '260x180') %><br><br><br><br>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
@@ -33,16 +34,26 @@
     </div>
   <% end %><hr><br>
 
+  <h2><u>Change Profile Photo</u></h2><br><br>
+  <form action="/users/profile_photo" method="post" enctype="multipart/form-data">
+    <input name="id" type="hidden" value=<%= resource.id %> autocomplete="on" required>
+    <div class="field">
+      <input type="file" name="myFile" autocomplete="on" required>
+    </div>
+    <div>
+      <input type="submit" value="Update">
+    </div>
+  </form><hr><br>
+
   <h2><u>Change Password</u></h2><br><br>
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
-
     <div class="field">
       <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
       <%= f.password_field :password, autocomplete: "new-password" %>
       <% if @minimum_password_length %>
         <br />
-        <em><%= @minimum_password_length %> characters minimum</em>
+        <e m><%= @minimum_password_length %> characters minimum</em>
       <% end %>
     </div>
 

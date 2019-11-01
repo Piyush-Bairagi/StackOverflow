@@ -11,5 +11,7 @@ Rails.application.routes.draw do
     end
   end
 
+  post 'users/profile_photo' => 'users#profile_photo'
+
   root to: "home#index"
 end
