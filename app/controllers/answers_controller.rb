@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class AnswersController < ApplicationController
-  def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
+  include AnswersHelper
 
-    @answer.user_id = current_user.id
-    if @answer.save
+  def create
+    answer = fetch_answers(params, answer_params)
+    if answer.save
       redirect_to question_path(params[:question_id])
     else
       render 'questions/show'

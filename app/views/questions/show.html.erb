@@ -10,20 +10,25 @@
     </center><br>
 
     <% @answers.each do |answer| %>
-      <p><%= answer.description %></p>
+      <%unless @answers.last == answer%>
+        <p><%= answer.description %></p>
+        <% answer.comments.each do |comment| %>
+          <p><%= comment.description %></p>
+        <% end %>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1">Add a Comment</button>
+        <div class="collapse multi-collapse" id="multiCollapseExample1">
+          <div class="card card-body">
+            <%= render partial: 'comment_form', locals: {:answer => answer, :comment => @comment, :question => @question} %>
+          </div>
+        </div>
+        <hr><br>
+      <% end %>
     <% end %><br>
 
     <center>
-      <%= form_for [@question, @answer] do |form| %>
-        <p>
-          <h2><%= form.label :Your_answer %></h2>
-          <%= form.text_area :description %>
-        </p>
-        <p>
-          <%= form.submit "Answer" %>
-        </p>
-      <% end %>
-      <%= link_to '<button class="btn btn-info" type="button">Back</button>'.html_safe, questions_path %>
+      <div id="render_answer_form" >
+        <%= render partial: 'answer_form', locals: {:question => @question, :answer => @answer } %>
+      </div>
     </center>
     <br><br>
   </body>

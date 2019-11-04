@@ -1,24 +1,16 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  def new
-    @comment = Comment.new
-  end
-
   def create
     @answer = Answer.find(params[:answer_id])
     @comment = @answer.comments.new(comment_params)
 
-    @answer.user_id = current_user.id
-    if @comment.save
-      redirect_to question_path
+    @comment.user_id = current_user.id
+    if @comment.save!
+      redirect_to question_path(params[:id])
     else
       render 'questions/show'
     end
-  end
-
-  def show
-    render 'questions/show'
   end
 
   private

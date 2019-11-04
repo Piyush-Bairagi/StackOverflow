@@ -36,7 +36,7 @@
 
   <h2><u>Change Profile Photo</u></h2><br><br>
   <form action="/users/profile_photo" method="post" enctype="multipart/form-data">
-    <input name="id" type="hidden" value=<%= resource.id %> autocomplete="on" required>
+    <input name="id" type="hidden" value=<%= resource.id %> autocomplete="on">
     <div class="field">
       <input type="file" name="myFile" autocomplete="on" required>
     </div>

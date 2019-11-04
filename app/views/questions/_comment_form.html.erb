@@ -1,0 +1,10 @@
+<%= simple_form_for [answer, @comment] do |form| %>
+  <p>
+    <input name="id" type="hidden" value=<%= @question.id %>>
+    <h4><%= form.label :Comment %></h4>
+    <%= form.text_area :description %>
+  </p>
+  <p>
+    <%= form.submit "Comment" %>
+  </p>
+<% end %>

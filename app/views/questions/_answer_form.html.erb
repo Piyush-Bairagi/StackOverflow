@@ -1,0 +1,10 @@
+<%= simple_form_for [@question, @answer] do |form| %>
+  <p>
+    <h3><%= form.label :Your_answer %></h3>
+    <%= form.text_area :description %>
+  </p>
+  <p>
+    <%= form.submit "Answer" %>
+  </p>
+<% end %>
+<%= link_to '<button class="btn btn-info" type="button">Back</button>'.html_safe, questions_path %>
