@@ -5,7 +5,7 @@ AllCops:
   TargetRubyVersion: 2.3
 
 Metrics/LineLength:
-  Max: 300
+  Max: 500
 
 Rails:
   Enabled: true
@@ -58,9 +58,16 @@ Style/SignalException:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+  EnforcedStyle: single_quotes
+  SupportedStyles:
+    - single_quotes
+    - double_quotes
 
 Style/TrailingCommaInArguments:
   Enabled: false
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
 
 ClassLength:
   Max: 250
