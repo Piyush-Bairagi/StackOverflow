@@ -6,6 +6,21 @@ module AnswersHelper
     answer = question.answers.new(answer_params)
 
     answer.user_id = current_user.id
-    answer
+    return question, answer
   end
+
+  def like_dislike
+    answer = Answer.find(params[:id])
+    if params[:format] == 'like'
+      answer.liked_by current_user
+    elsif params[:format] == 'dislike'
+      answer.disliked_by current_user
+    end
+    redirect_to :back
+  end
+
+  def answerer_name(answer)
+    name = answer.user.first_name + answer.user.last_name
+  end
+  
 end

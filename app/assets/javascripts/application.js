@@ -13,10 +13,12 @@
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
+//= require jquery
 //= require bootstrap-sprockets
 //= require_tree .
-//= require jquery3
-//= require bootstrap
-//= require popper
-//= require bootstrap-sprockets
 
+$(document).on('turbolinks:load', (function () {
+  $("a").click(function () {
+    $(this).next().toggle(700);
+  });
+}));

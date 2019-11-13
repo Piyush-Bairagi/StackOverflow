@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   resources :questions, shallow: true do
     resources :answers do
+      member do
+        put 'like_dislike' => "answers#like_dislike"
+      end
       resources :comments
     end
   end

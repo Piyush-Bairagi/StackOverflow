@@ -4,19 +4,24 @@
   </head>
   <body>
     <center>
-      <br>
       <h1><u>All Questions :-</u></h1><br>
-      <%= link_to '<button class="btn btn-primary" type="button">Ask Question</button>'.html_safe, new_question_path %>
-      <br><br>
-      <h3>Total <%= @questions.count %> Questions</h3>
-      <br><br><hr>
+      <%= link_to '<button class="btn btn-primary" type="button">Ask Question</button>'.html_safe, new_question_path %><br><br>
+      <h3><u>Total <%= @total_questions %> <%= @total_questions <= 1  ? 'Question' :  'Questions' %></u></h3>
+      <br><hr>
     </center>
 
     <% @questions.each do |question| %>
-      <h3><%= link_to question.title, question_path(question) %></h3>
-      <td><%= question.description %></td>
-      <hr>
-    <% end %>
-    <br><br>
+      <div id="question_layout">
+        <div class="question_votes">
+          <h3>Votes</h3>
+        </div>
+        <div class="question_list">
+          <h3><%= link_to question.title, question_path(question) %></h3>
+          <td><%= question.description %></td><hr>
+        </div>
+      </div>
+    <% end %><br>
+
+    <center><%= paginate @questions %></center>
   </body>
 </html>

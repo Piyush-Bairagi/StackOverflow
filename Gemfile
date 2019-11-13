@@ -9,11 +9,13 @@ gem 'devise'
 
 gem 'omniauth-google-oauth2'
 
-gem 'bootstrap', '~> 4.3.1'
+# gem 'bootstrap', '~> 4.3.1'
+
+gem 'bootstrap-sass', '~> 3.4.1'
+
+gem 'sassc-rails', '>= 2.1.0'
 
 gem 'jquery-rails'
-
-gem 'bootstrap-sass'
 
 gem 'rubocop', require: false
 
@@ -22,6 +24,10 @@ gem 'factory_bot'
 gem 'carrierwave', '~> 2.0'
 
 gem 'simple_form'
+
+gem 'kaminari'
+
+gem 'acts_as_votable'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.3'
@@ -72,6 +78,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'bullet'
   gem 'pry', '~> 0.12.2'
+  gem "letter_opener"
 end
 
 group :test do

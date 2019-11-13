@@ -3,7 +3,8 @@
 class QuestionsController < ApplicationController
   include QuestionsHelper
   def index
-    @questions = Question.all
+    @total_questions = Question.count
+    @questions = Question.order(created_at: :desc).page(params[:page])
   end
 
   def show

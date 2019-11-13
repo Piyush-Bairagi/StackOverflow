@@ -4,7 +4,7 @@ module QuestionsHelper
   def question_and_answers(params)
     question = Question.find(params[:id])
     answers = question.answers
-    answers.includes(:comments).each do |a|
+    answers.includes(:comments, :user).each do |a|
       @comment = a.comments.new
     end
     answer = answers.new
@@ -16,4 +16,9 @@ module QuestionsHelper
     question.user_id = current_user.id
     question
   end
+
+  def questioner_name(question)
+    name = question.user.first_name + question.user.last_name
+  end
+  
 end

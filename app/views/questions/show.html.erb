@@ -1,35 +1,56 @@
 <html>
   <head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
   </head>
   <body>
-    <h3><%= @question.title %></h3>
-    <%= @question.description %><hr>
+    <div id="back_button">
+      <%= link_to '<button class="btn btn-info" type="button">Back</button>'.html_safe, questions_path, :id => "back_button_id" %>
+    </div>
+    <h2><%= @question.title %></h2><hr>
+    <span id="question_description"><%= @question.description %></span><br><br>
+    <span class="question_time"><%= @question.created_at.strftime("%b %d, %Y at %I:%M") %></span><br>
+    <span class="questioner_name"><b>@ <%= questioner_name(@question) %></b></span><br><br><hr class="comment_line">
 
-    <center>
-      <h3><u><%= @answers.count %> Answers</u></h3>
-    </center><br>
+    <center><h3><u><%= @answers.count %> <%= @answers.count <= 1 ? 'Answer' : 'Answers' %></u></h3></center>
 
-    <% @answers.each do |answer| %>
-      <%unless @answers.last == answer%>
-        <p><%= answer.description %></p>
-        <% answer.comments.each do |comment| %>
-          <p><%= comment.description %></p>
+    <div class="jumbotron">
+      <% @answers.each do |answer| %><br>
+        <% unless @answers.last == answer %>
+          <div class="answer_box">
+            <div class="box_row">
+              <div class="box_cell box1">
+                <%= link_to '<i class="fas fa-caret-up" id="like_button"></i>'.html_safe, like_dislike_answer_path(answer, 'like'), method: :put, remote: :true %><br>
+                <div class="total_likes"><%= answer.get_likes.size - answer.get_dislikes.size %></div>
+                <%= link_to '<i class="fas fa-caret-down" id="dislike_button"></i>'.html_safe, like_dislike_answer_path(answer, 'dislike'), method: :put, remote: :true %>
+              </div><br>
+              <div class="box_cell box2">
+                <span id="answer_description"><%= answer.description %></span><br><br>
+                <span class="answer_time"><%= answer.created_at.strftime("%b %d, %Y at %I:%M") %></span><br>
+                <span class="answerer_name"><b>@ <%= answerer_name(answer) %></b></span><br><br><hr class="comment_line">
+                <% answer.comments.each do |comment| %>
+                  <ul class="comment_list">
+                    <li>
+                      <span class="comment_discription"><%= comment.description %> - 
+                      </span>
+                      <span class="comment_time"><%= comment.created_at.strftime("%b %d, %Y at %I:%M") %></span>
+                    </li><hr class="comment_line">
+                  </ul>
+                <% end %>
+                <a id="comment_link">reply</a>
+                <div class="comment_form_class">
+                  <br><%= render partial: 'comment_form', locals: {:answer => answer, :comment => @comment, :question => @question} %>
+                </div>
+              </div>
+            </div>
+          </div><br><hr class="comment_line">
         <% end %>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1">Add a Comment</button>
-        <div class="collapse multi-collapse" id="multiCollapseExample1">
-          <div class="card card-body">
-            <%= render partial: 'comment_form', locals: {:answer => answer, :comment => @comment, :question => @question} %>
-          </div>
-        </div>
-        <hr><br>
       <% end %>
-    <% end %><br>
+    </div>
 
     <center>
       <div id="render_answer_form" >
         <%= render partial: 'answer_form', locals: {:question => @question, :answer => @answer } %>
       </div>
     </center>
-    <br><br>
   </body>
 </html>
