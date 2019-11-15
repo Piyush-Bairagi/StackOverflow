@@ -1,50 +1,171 @@
 <html>
   <head>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
   </head>
   <body>
     <div id="back_button">
-      <%= link_to '<button class="btn btn-info" type="button">Back</button>'.html_safe, questions_path, :id => "back_button_id" %>
+      <%= button_to 'Back', questions_path, method: :get, class: "btn btn-info", :id => "back_button_id" %>
     </div>
-    <h2><%= @question.title %></h2><hr>
-    <span id="question_description"><%= @question.description %></span><br><br>
-    <span class="question_time"><%= @question.created_at.strftime("%b %d, %Y at %I:%M") %></span><br>
-    <span class="questioner_name"><b>@ <%= questioner_name(@question) %></b></span><br><br><hr class="comment_line">
+    <div class="question_body">
+      <h2><%= @question.title %></h2>
+      <span>Asked </span><b><%= time_ago_in_words(@question.created_at.strftime("%b %d, %Y at %I:%M")) %> ago</b>
+      <span class="last_answered">Last Answered </span><b><%= time_ago_in_words(@question.answers.last(2).first.created_at) %> ago</b>
+      <hr>
+      <span id="question_description"><%= @question.description.html_safe %></span><br><br>
+      <span class="question_time"><%= @question.created_at.strftime("%b %d, %Y at %I:%M") %></span><br>
+      <span class="questioner_name"><b>@ <%= questioner_name(@question) %></b></span><br><br><hr class="question_line">
+    </div><br>
 
-    <center><h3><u><%= @answers.count %> <%= @answers.count <= 1 ? 'Answer' : 'Answers' %></u></h3></center>
+    <div class="container">
+      <ul class="nav nav-tabs" id="answer_tabs">
+        <li class="active"><a data-toggle="tab" href="#aactive">Active</a></li>
+        <li><a data-toggle="tab" href="#oldest">Oldest</a></li>
+        <li><a data-toggle="tab" href="#votes">Votes</a></li>
+        <li><span id="total_answeres"><%= @answers.count %> <%= @answers.count <= 1 ? 'Answer' : 'Answers' %></span></li>
+      </ul>
 
-    <div class="jumbotron">
-      <% @answers.each do |answer| %><br>
-        <% unless @answers.last == answer %>
-          <div class="answer_box">
-            <div class="box_row">
-              <div class="box_cell box1">
-                <%= link_to '<i class="fas fa-caret-up" id="like_button"></i>'.html_safe, like_dislike_answer_path(answer, 'like'), method: :put, remote: :true %><br>
-                <div class="total_likes"><%= answer.get_likes.size - answer.get_dislikes.size %></div>
-                <%= link_to '<i class="fas fa-caret-down" id="dislike_button"></i>'.html_safe, like_dislike_answer_path(answer, 'dislike'), method: :put, remote: :true %>
-              </div><br>
-              <div class="box_cell box2">
-                <span id="answer_description"><%= answer.description %></span><br><br>
-                <span class="answer_time"><%= answer.created_at.strftime("%b %d, %Y at %I:%M") %></span><br>
-                <span class="answerer_name"><b>@ <%= answerer_name(answer) %></b></span><br><br><hr class="comment_line">
-                <% answer.comments.each do |comment| %>
-                  <ul class="comment_list">
-                    <li>
-                      <span class="comment_discription"><%= comment.description %> - 
-                      </span>
-                      <span class="comment_time"><%= comment.created_at.strftime("%b %d, %Y at %I:%M") %></span>
-                    </li><hr class="comment_line">
-                  </ul>
-                <% end %>
-                <a id="comment_link">reply</a>
-                <div class="comment_form_class">
-                  <br><%= render partial: 'comment_form', locals: {:answer => answer, :comment => @comment, :question => @question} %>
+      <div class="tab-content">
+        <div id="aactive" class="tab-pane fade in active">
+          <div class="jumbotron">
+            <% @active_answers.each do |answer| %><br>
+              <div class="answer_box">
+                <div class="box_row">
+                  <div class="box_cell box1">
+                    <%= link_to '<i class="fas fa-caret-up" id="like_button"></i>'.html_safe, like_dislike_answer_path(answer, 'like'), method: :put, remote: :true %><br>
+                    <div class="total_likes"><%= answer.get_likes.size - answer.get_dislikes.size %></div>
+                    <%= link_to '<i class="fas fa-caret-down" id="dislike_button"></i>'.html_safe, like_dislike_answer_path(answer, 'dislike'), method: :put, remote: :true %>
+                  </div><br>
+                  <div class="box_cell box2">
+                    <% if answer.description.html_safe.length > 200 %>
+                      <%= truncate(answer.description.html_safe, length: 200) %>
+                      <%= link_to '...Read more', '', class: "read-more-#{answer.id}" %>
+                      <script>
+                        $('.read-more-<%= answer.id %>').on('click', function(e) {
+                          e.preventDefault()
+                          $(this).parent().html('<%= escape_javascript answer.description.html_safe %>')
+                        })
+                      </script>
+                    <% else %>
+                      <%= answer.description.html_safe %>
+                    <% end %>
+
+                    <br><br>
+                    <span class="answer_time"><%= answer.created_at.strftime("%b %d, %Y at %I:%M") %></span><br>
+                    <span class="answerer_name"><b>@ <%= answerer_name(answer) %></b></span><br><br><hr class="comment_line">
+                    <% answer.comments.each do |comment| %>
+                      <ul class="comment_list">
+                        <li>
+                          <span class="comment_discription"><%= comment.description %> - 
+                          <span class="commenter_name"><b>@ <%= commenter_name(comment) %>,</b></span>
+                          <span class="comment_time"><%= comment.created_at.strftime("%b %d, %Y at %I:%M") %></span>
+                        </li><hr class="comment_line">
+                      </ul>
+                    <% end %>
+                    <a id="comment_link">reply</a>
+                    <div class="comment_form_class">
+                      <br><%= render partial: 'comment_form', locals: {:answer => answer, :comment => @comment, :question => @question} %>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div><br><hr class="comment_line">
-        <% end %>
-      <% end %>
+              </div><br><hr class="comment_line">
+            <% end %>
+            <center><%= paginate @active_answers, param_name: "aactive_page" %></center>
+          </div>
+        </div>
+        <div id="oldest" class="tab-pane fade">
+          <div class="jumbotron">
+            <% @oldest_answers.each do |answer| %><br>
+              <div class="answer_box">
+                <div class="box_row">
+                  <div class="box_cell box1">
+                    <%= link_to '<i class="fas fa-caret-up" id="like_button"></i>'.html_safe, like_dislike_answer_path(answer, 'like'), method: :put, remote: :true %><br>
+                    <div class="total_likes"><%= answer.get_likes.size - answer.get_dislikes.size %></div>
+                    <%= link_to '<i class="fas fa-caret-down" id="dislike_button"></i>'.html_safe, like_dislike_answer_path(answer, 'dislike'), method: :put, remote: :true %>
+                  </div><br>
+                  <div class="box_cell box2">
+                    <% if answer.description.html_safe.length > 200 %>
+                      <%= truncate(answer.description.html_safe, length: 200) %>
+                      <%= link_to '...Read more', '', class: "read-more-#{answer.id}" %>
+                      <script>
+                        $('.read-more-<%= answer.id %>').on('click', function(e) {
+                          e.preventDefault()
+                          $(this).parent().html('<%= escape_javascript answer.description.html_safe %>')
+                        })
+                      </script>
+                    <% else %>
+                      <%= answer.description.html_safe %>
+                    <% end %>
+
+                    <br><br>
+                    <span class="answer_time"><%= answer.created_at.strftime("%b %d, %Y at %I:%M") %></span><br>
+                    <span class="answerer_name"><b>@ <%= answerer_name(answer) %></b></span><br><br><hr class="comment_line">
+                    <% answer.comments.each do |comment| %>
+                      <ul class="comment_list">
+                        <li>
+                          <span class="comment_discription"><%= comment.description %> - 
+                          <span class="commenter_name"><b>@ <%= commenter_name(comment) %>,</b></span>
+                          <span class="comment_time"><%= comment.created_at.strftime("%b %d, %Y at %I:%M") %></span>
+                        </li><hr class="comment_line">
+                      </ul>
+                    <% end %>
+                    <a id="comment_link">reply</a>
+                    <div class="comment_form_class">
+                      <br><%= render partial: 'comment_form', locals: {:answer => answer, :comment => @comment, :question => @question} %>
+                    </div>
+                  </div>
+                </div>
+              </div><br><hr class="comment_line">
+            <% end %>
+            <center><%= paginate @oldest_answers, param_name: "oldest_page" %></center>
+          </div>
+        </div>
+        <div id="votes" class="tab-pane fade">
+          <div class="jumbotron">
+            <% @answers_votes.each do |answer| %><br>
+              <div class="answer_box">
+                <div class="box_row">
+                  <div class="box_cell box1">
+                    <%= link_to '<i class="fas fa-caret-up" id="like_button"></i>'.html_safe, like_dislike_answer_path(answer, 'like'), method: :put, remote: :true %><br>
+                    <div class="total_likes"><%= answer.get_likes.size - answer.get_dislikes.size %></div>
+                    <%= link_to '<i class="fas fa-caret-down" id="dislike_button"></i>'.html_safe, like_dislike_answer_path(answer, 'dislike'), method: :put, remote: :true %>
+                  </div><br>
+                  <div class="box_cell box2">
+                    <% if answer.description.html_safe.length > 200 %>
+                      <%= truncate(answer.description.html_safe, length: 200) %>
+                      <%= link_to '...Read more', '', class: "read-more-#{answer.id}" %>
+                      <script>
+                        $('.read-more-<%= answer.id %>').on('click', function(e) {
+                          e.preventDefault()
+                          $(this).parent().html('<%= escape_javascript answer.description.html_safe %>')
+                        })
+                      </script>
+                    <% else %>
+                      <%= answer.description.html_safe %>
+                    <% end %>
+
+                    <br><br>
+                    <span class="answer_time"><%= answer.created_at.strftime("%b %d, %Y at %I:%M") %></span><br>
+                    <span class="answerer_name"><b>@ <%= answerer_name(answer) %></b></span><br><br><hr class="comment_line">
+                    <% answer.comments.each do |comment| %>
+                      <ul class="comment_list">
+                        <li>
+                          <span class="comment_discription"><%= comment.description %> - 
+                          <span class="commenter_name"><b>@ <%= commenter_name(comment) %>,</b></span>
+                          <span class="comment_time"><%= comment.created_at.strftime("%b %d, %Y at %I:%M") %></span>
+                        </li><hr class="comment_line">
+                      </ul>
+                    <% end %>
+                    <a id="comment_link">reply</a>
+                    <div class="comment_form_class">
+                      <br><%= render partial: 'comment_form', locals: {:answer => answer, :comment => @comment, :question => @question} %>
+                    </div>
+                  </div>
+                </div>
+              </div><br><hr class="comment_line">
+            <% end %>
+            <center><%= paginate @answers_votes, param_name: "votes_page" %></center>
+          </div>
+        </div>
+      </div>
     </div>
 
     <center>

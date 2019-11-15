@@ -1,10 +1,10 @@
-<%= simple_form_for [@question, @answer] do |form| %>
+<br><br><h3><b><u>Post Your Answer</u></b></h3><br>
+<%= simple_form_for [@question, @answer], remote: true do |form| %>
   <p>
-    <h3><%= form.label :Your_answer %></h3>
-    <%= form.text_area :description, :required => true, :class => "answer_text_area" %>
+    <%= form.cktext_area :description, required: :true %>
   </p>
   <p>
-    <%= form.submit "Post Your Answer" %>
+    <%= form.submit "Post Your Answer", :class => "btn btn-success" %>
   </p>
-<% end %>
-<%= link_to '<button class="btn btn-info" type="button">Back</button>'.html_safe, questions_path %>
+<% end %><br><br>
+<%= button_to "Back", questions_path, :class => "btn btn-info" %>

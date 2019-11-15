@@ -2,6 +2,11 @@
 
 class CommentsController < ApplicationController
   def create
+    respond_to do |format|
+      format.js
+      format.html
+    end
+
     @answer = Answer.find(params[:answer_id])
     @comment = @answer.comments.new(comment_params)
 

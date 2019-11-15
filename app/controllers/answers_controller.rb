@@ -4,6 +4,11 @@ class AnswersController < ApplicationController
   include AnswersHelper
 
   def create
+    respond_to do |format|
+      format.js
+      format.html
+    end
+
     question, answer = fetch_answers(params, answer_params)
     if answer.save
       questioner_email = question.user.email

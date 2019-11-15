@@ -8,7 +8,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question, @answers, @answer = question_and_answers(params)
+    @question, @answers, @answer, @active_answers, @oldest_answers, @answers_votes = question_and_answers(params)
   end
 
   def new

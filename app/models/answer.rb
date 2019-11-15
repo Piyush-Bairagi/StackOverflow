@@ -7,4 +7,6 @@ class Answer < ApplicationRecord
   belongs_to :user
 
   acts_as_votable
+
+  paginates_per 5
 end

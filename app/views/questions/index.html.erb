@@ -5,22 +5,27 @@
   <body>
     <center>
       <h1><u>All Questions :-</u></h1><br>
-      <%= link_to '<button class="btn btn-primary" type="button">Ask Question</button>'.html_safe, new_question_path %><br><br>
+      <%= button_to 'Ask Question', new_question_path, method: :get, class: "btn btn-primary" %><br><br>
       <h3><u>Total <%= @total_questions %> <%= @total_questions <= 1  ? 'Question' :  'Questions' %></u></h3>
-      <br><hr>
+      <br>
     </center>
 
-    <% @questions.each do |question| %>
-      <div id="question_layout">
-        <div class="question_votes">
-          <h3>Votes</h3>
-        </div>
-        <div class="question_list">
-          <h3><%= link_to question.title, question_path(question) %></h3>
-          <td><%= question.description %></td><hr>
-        </div>
-      </div>
-    <% end %><br>
+    <div id="question_list"><hr>
+      <% @questions.each do |question| %>
+        <div class="question_box">
+            <div class="box_row">
+              <div class="box_cell box1">
+                <h3 class="answers_counts"><%= question.answers.count %></h3>
+                <h5 class="answers_counts">Answers</h5>
+              </div>
+              <div class="box_cell box2">
+                <h3><%= link_to question.title, question_path(question) %></h3>
+                <td><%= truncate(question.description.html_safe, length: 300) %></td>
+              </div>
+            </div>
+        </div><hr>
+      <% end %><hr>
+    </div><br>
 
     <center><%= paginate @questions %></center>
   </body>

@@ -3,28 +3,23 @@
   <title>Stack Overflow</title>
 </head>
 <body>
-    <br><br>
+  <br><br>
   <center>
-    <h1>Ask a public question</h1>
-    <hr>
+    <h1>Ask a public question</h1><hr>
     <%= form_with scope: :question, url: questions_path, local: true do |form| %>
       <p>
         <%= form.label :title %><br>
         <%= form.text_field :title, :required => true, :id => "question_title_field" %>
       </p>
-
       <p>
         <%= form.label :description %><br>
-        <%= form.text_area :description, :required => true, :id => "question_description_field" %>
+        <%= form.cktext_area :description %>
       </p>
-
       <p>
-        <%= form.submit %>
+        <%= form.submit :class => "btn btn-success" %>
       </p>
-    <% end %>
-    <br><br>
-    <%= link_to '<button class="btn btn-info" type="button">Back</button>'.html_safe, questions_path %>
-  </center>
-  <br><br><br><br><hr>
+    <% end %><br><br>
+    <%= button_to 'Back', questions_path, method: :get, class: "btn btn-info" %>
+  </center><br>
 </body>
 </html>
